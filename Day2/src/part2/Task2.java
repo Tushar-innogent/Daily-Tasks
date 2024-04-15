@@ -16,13 +16,16 @@ public class Task2 {
 
 	static long maleCount;
 	static long femaleCount;
-	
+
 	static long salarySumOfMale;
 	static long salarySumOfFemale;
 
+	static List<Employee> employeeList;
+	static Set<String> departmentList;
+
 	public static void main(String[] args) {
 
-		List<Employee> employeeList = new ArrayList<Employee>();
+		employeeList = new ArrayList<Employee>();
 
 		employeeList.add(new Employee(111, "Jiya Brein", 32, "Female", "HR", 2011, 25000.0));
 		employeeList.add(new Employee(122, "Paul Niksui", 25, "Male", "Sales And Marketing", 2015, 13500.0));
@@ -43,135 +46,165 @@ public class Task2 {
 		employeeList.add(new Employee(277, "Anuj Chettiar", 31, "Male", "Product Development", 2012, 35700.0));
 
 //1.	How many male and female employees are there in the organization?
-
 		countMaleAndFemale(employeeList);
 
 //		System.out.println("Male Employees : "+maleCount);
 //		System.out.println("Female Employees : "+femaleCount);
-		
-		
-		
+
 //2.	Print the name of all departments in the organization?
-		
-		Set<String> departmentList = employeeList.stream().map(e-> e.getDepartment()).collect(Collectors.toSet());
+		getDepartments();
 //		departmentList.forEach(System.out::println);
-		
-		
-		
+
 //3.	What is the average age of male and female employees?
-		
-		findAverageAge(employeeList);
-		
-//		System.out.println("Average age of males is "+(ageSumOfMale/maleCount));
-//		System.out.println("Average age of females is "+(ageSumOfFemale/femaleCount));
-		
-		
-		
+//		findAverageAge(employeeList);
+
 //4.	Get the details of highest paid employee in the organization?
+//		highestPaidEmployee();
 
-		Employee employee = employeeList.stream().sorted(Comparator.comparing(Employee::getSalary).reversed()).findFirst().get();
-		
-//		System.out.println("Highest paid Employee details : \n"+employee);
-		
-		
-		
 //5.	Get the names of all employees who have joined after 2015?
-		List<Employee> EmployeeAfter2015 = employeeList.stream().filter(e-> e.getYearOfJoining() > 2015).collect(Collectors.toList());
-//		EmployeeAfter2015.forEach(System.out::println);
-		
-		
-		
-		
+//		employeesJoinedAfter2015();
+
 //6.	Count the number of employees in each department?
-		Map<String, Integer> countInDepartment = employeesInDept(employeeList);
-		
-//		System.out.println("Department => Number of employees");
-//		for(Entry<String, Integer> e : countInDepartment.entrySet()) {
-//			System.out.println(e.getKey() +" => "+e.getValue());	
-//		}
-		
-		
-		
-		
+//		countOfEmpInDept();
+
 //7		What is the average salary of each department?
-		Map<String, Integer> avgSalDept = getAverageSalOfDept(employeeList);
-		
-//		for(Entry<String, Integer> e : avgSalDept.entrySet()) {
-//		System.out.println(e.getKey() +" => "+e.getValue());	
-//		}
-		
-		
+//		avgSalaryOfEachDept();
+
 //8		Get the details of youngest male employee in the product development department?
-		
-		Employee youngestEmployee = employeeList.stream().sorted(Comparator.comparing(Employee::getAge)).findFirst().get();
-//		System.out.println(youngestEmployee);
-	
-		
-		
+//		youngestMale();
+
 //9		How many male and female employees are there in the sales and marketing team?
-		
+//		employeesInSalesAndMarketing();
 
-		long males = employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("Male") && (e.getDepartment().equalsIgnoreCase("Sales") || e.getDepartment().equalsIgnoreCase("Marketing"))).count();
-		long females = employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("female") && (e.getDepartment().equalsIgnoreCase("Sales") || e.getDepartment().equalsIgnoreCase("Marketing"))).count();
-		
-//		System.out.println("Male employees in sales and marketing = "+males);
-//		System.out.println("Female employees in sales and marketing = "+females);
-
-		
 //10.	What is the average salary of male and female employees?
-		
-		
-		employeeList.stream().filter(e-> e.getGender().equalsIgnoreCase("male")).peek(s->salarySumOfMale+=s.getSalary());
-		employeeList.stream().filter(e-> e.getGender().equalsIgnoreCase("female")).peek(s->salarySumOfFemale+=s.getSalary());
-				
-//		System.out.println("Average salary of male employees = "+ (salarySumOfMale)/maleCount);
-//		System.out.println("Average salary of female employees = "+ (salarySumOfFemale)/femaleCount);
-	
-		
-		
+//		avgSalaryOfMaleFemale();
+
 //11	List down the names of all employees in each department?
+//		employeesInEachDept();
+
+//12.	What is the average salary and total salary of the whole organization?
+
+//		averageAndTotalSalary();
+
+//13.	Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years?
+
+//		separateTheEmployees();
+
+//14.	Who is the oldest employee in the organization? What is his age and which department he belongs to?
+		Employee oldest = employeeList.stream().collect(Collectors.maxBy(Comparator.comparingInt(Employee::getAge)))
+				.get();
+//		System.out.println("Oldest Employee : "+oldest);
+	}
+
+	private static void separateTheEmployees() {
+		List<Employee> empYoungerThan26 = employeeList.stream().filter(e -> e.getAge() <= 25).toList();
+		List<Employee> empOlderThan25 = employeeList.stream().filter(e -> e.getAge() > 25).toList();
+
+		System.out.println("Employees who are younger or equal to 25 years : ");
+		empYoungerThan26.forEach(System.out::println);
+		System.out.println("Employees who are older then 25 years : ");
+		empOlderThan25.forEach(System.out::println);
+	}
+
+	private static void averageAndTotalSalary() {
+		Double average = employeeList.stream().collect(Collectors.averagingDouble(Employee::getSalary));
+		Double sum = employeeList.stream().collect(Collectors.summingDouble(Employee::getSalary));
+
+		System.out.println("Average salary of whole organization : " + average);
+		System.out.println("Total salary of whole organization : " + sum);
+	}
+
+	private static void employeesInEachDept() {
 		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		
-		departmentList.forEach(d->{
+
+		departmentList.forEach(d -> {
 			List<String> names = new ArrayList<String>();
-			names = employeeList.stream().filter(e->e.getDepartment().equalsIgnoreCase(d)).map(e->e.getName()).collect(Collectors.toList());
+			names = employeeList.stream().filter(e -> e.getDepartment().equalsIgnoreCase(d)).map(e -> e.getName())
+					.collect(Collectors.toList());
 			map.put(d, names);
 //			System.out.println(names);
 		});
-		
-		for(Entry e : map.entrySet()) {
-			System.out.println(e.getKey()+"  : "+e.getValue());
-		}
-						
-//		What is the average salary and total salary of the whole organization?
-		
-//		Separate the employees who are younger or equal to 25 years from those employees who are older than 25 years?
 
-//		Who is the oldest employee in the organization? What is his age and which department he belongs to?
+		for (Entry e : map.entrySet()) {
+			System.out.println(e.getKey() + "  : " + e.getValue());
+		}
+
+	}
+
+	private static void avgSalaryOfMaleFemale() {
+
+		Double males = employeeList.stream().filter(e->e.getGender().equalsIgnoreCase("male")).collect(Collectors.averagingDouble(Employee::getSalary));
+		Double females = employeeList.stream().filter(e->e.getGender().equalsIgnoreCase("female")).collect(Collectors.averagingDouble(Employee::getSalary));
+		
+		System.out.println("Average salary of male employees = "+ males);
+		System.out.println("Average salary of female employees = "+ females);
+
+	}
+
+	private static void employeesInSalesAndMarketing() {
+
+		long males = employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("Male")
+				&& e.getDepartment().equalsIgnoreCase("Sales And Marketing")).count();
+		long females = employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("female")
+				&& (e.getDepartment().equalsIgnoreCase("Sales and Marketing"))).count();
+
+		System.out.println("Male employees in sales and marketing = " + males);
+		System.out.println("Female employees in sales and marketing = " + females);
+
+	}
+
+	private static void youngestMale() {
+		Employee youngestEmployee = employeeList.stream().sorted(Comparator.comparing(Employee::getAge)).findFirst()
+				.get();
+		System.out.println(youngestEmployee);
+	}
+
+	private static void avgSalaryOfEachDept() {
+
+		Map<String, Double> mapDeptSalSum = new HashMap<String, Double>();
+		employeeList.stream().forEach(e -> mapDeptSalSum.put(e.getDepartment(),
+				mapDeptSalSum.getOrDefault(e.getDepartment(), 0.0) + e.getSalary()));
+
+		Map<String, Integer> countEmpInDepartment = employeesInDept(employeeList);
+
+		mapDeptSalSum.entrySet().stream()
+				.forEach(e -> mapDeptSalSum.put(e.getKey(), (e.getValue() / countEmpInDepartment.get(e.getKey()))));
+
+		for (Entry<String, Double> e : mapDeptSalSum.entrySet()) {
+			System.out.println(e.getKey() + " => " + e.getValue());
+		}
+	}
+
+	private static void countOfEmpInDept() {
+		Map<String, Integer> countInDepartment = employeesInDept(employeeList);
+
+		System.out.println("Department => Number of employees");
+		for (Entry<String, Integer> e : countInDepartment.entrySet()) {
+			System.out.println(e.getKey() + " => " + e.getValue());
+		}
+	}
+
+	private static void employeesJoinedAfter2015() {
+		List<Employee> EmployeeAfter2015 = employeeList.stream().filter(e -> e.getYearOfJoining() > 2015)
+				.collect(Collectors.toList());
+		EmployeeAfter2015.forEach(System.out::println);
+	}
+
+	private static void highestPaidEmployee() {
+		Employee employee = employeeList.stream().sorted(Comparator.comparing(Employee::getSalary).reversed())
+				.findFirst().get();
+		System.out.println("Highest paid Employee details : \n" + employee);
+
 	}
 
 	private static Map<String, Integer> employeesInDept(List<Employee> employeeList) {
 
 		Map<String, Integer> countInDepartment = new HashMap<String, Integer>();
 		employeeList.stream().forEach(e -> countInDepartment.put(e.getDepartment(),
-				countInDepartment.getOrDefault(e.getDepartment(), 1) + 1));
+				countInDepartment.getOrDefault(e.getDepartment(), 0) + 1));
 
 		return countInDepartment;
 
-	}
-
-	private static Map<String, Integer> getAverageSalOfDept(List<Employee> employeeList) {
-
-		Map<String, Integer> mapDeptAgeSum = new HashMap<String, Integer>();
-		employeeList.stream().forEach(e -> mapDeptAgeSum.put(e.getDepartment(),
-				mapDeptAgeSum.getOrDefault(e.getDepartment(), 0) + e.getAge()));
-
-		Map<String, Integer> countEmpInDepartment = employeesInDept(employeeList);
-
-		mapDeptAgeSum.entrySet().stream()
-				.forEach(e -> mapDeptAgeSum.remove(e.getKey(), (e.getValue() / countEmpInDepartment.get(e.getKey()))));
-
-		return mapDeptAgeSum;
 	}
 
 	private static void findAverageAge(List<Employee> employeeList) {
@@ -181,6 +214,9 @@ public class Task2 {
 		employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("female"))
 				.forEach(e -> ageSumOfFemale += e.getAge());
 
+		System.out.println("Average age of males is " + (ageSumOfMale / maleCount));
+		System.out.println("Average age of females is " + (ageSumOfFemale / femaleCount));
+
 	}
 
 	private static void countMaleAndFemale(List<Employee> employeeList) {
@@ -188,6 +224,11 @@ public class Task2 {
 		maleCount = employeeList.stream().filter(e -> e.getGender().equalsIgnoreCase("Male")).count();
 		femaleCount = employeeList.size() - maleCount;
 
+	}
+
+	private static void getDepartments() {
+		departmentList = employeeList.stream().map(e -> e.getDepartment()).collect(Collectors.toSet());
+//		departmentList.forEach(System.out::println);
 	}
 
 }
