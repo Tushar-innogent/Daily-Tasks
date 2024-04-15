@@ -15,7 +15,7 @@ import entities.Address;
 import entities.Classes;
 import entities.Student;
 
-public class ReadCsv {
+public class MainClass {
 
 	// Collecting and storing data of the files
 	static List<Classes> classData = new ArrayList<Classes>();
@@ -28,16 +28,20 @@ public class ReadCsv {
 
 		uploadStudent(
 				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Student.csv");
-		uploadClass("C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Class.csv");
+		uploadClass(
+				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Class.csv");
 		uploadAddress(
 				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Address.csv");
 
-// I should be able to read paginated students.
-// like : read female students first 1-9
+//		instantiating FilterData class by passing data
+		filterData = new FilterData(studentData, classData, addressData);
+		
+// 		I should be able to read paginated students.
+// 		like : read female students first 1-9
 		List<Student> result = fun1("F", 1, 9);
 //		result.forEach(System.out::println);
 
-		filterData = new FilterData(studentData, classData, addressData);
+		
 
 // 1. 	Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
 
@@ -82,6 +86,7 @@ public class ReadCsv {
 
 //		studentData.forEach(System.out::println);
 
+		
 //	9. I should be able to delete student. After that it should delete the respective obj from Address & Student.
 
 		// provide the id of the student to delete
@@ -95,6 +100,7 @@ public class ReadCsv {
 //		studentData.forEach(System.out::println);
 //		addressData.forEach(System.out::println);
 
+		
 //	10. If there is no student remaining in that class. Class should also be deleted.
 
 		String message = deleteClassIfHasNoStudent();
@@ -102,6 +108,7 @@ public class ReadCsv {
 
 //		classData.forEach(System.out::println);
 
+		
 //	11. I should be able to .
 //		like : read female students first 1-9
 //		like : read female students first 7-8 order by name
@@ -117,10 +124,12 @@ public class ReadCsv {
 		List<Student> sortPaginatedData = filterData.sortData(paginatedData, "marks");
 
 //		sortPaginatedData.forEach(System.out::println);
-	}
+	
+	}//main ends here
 
 
-	private static void getFailedOnes() {
+//	5. Get the failed students. I can pass different filters like gender, age, class, city, pincode
+	public static void getFailedOnes() {
 
 		List<Student> failedStudents = studentData.stream().filter(s -> s.getMarks() < 50)
 				.collect(Collectors.toList());
@@ -129,7 +138,8 @@ public class ReadCsv {
 
 	}
 
-	private static void getPassedOnes() {
+//	4. Get the passed students. I can pass different filters like gender, age, class, city, pincode
+	public static void getPassedOnes() {
 		List<Student> passedStudents = studentData.stream().filter(s -> s.getMarks() >= 50)
 				.collect(Collectors.toList());
 
@@ -137,7 +147,8 @@ public class ReadCsv {
 		passedStudents.stream().forEach(System.out::println);
 	}
 
-	private static void giveRank() {
+//	3. Give Ranking to students
+	public static void giveRank() {
 		int passingMarks = 50;
 
 		Rank rankObject = new Rank(studentData, passingMarks);
@@ -152,7 +163,7 @@ public class ReadCsv {
 
 	// I should be able to read paginated students.
 	// like : read female students first 1-9
-	private static List<Student> fun1(String string, int start, int end) {
+	public static List<Student> fun1(String string, int start, int end) {
 
 		ArrayList<Student> list = new ArrayList<Student>();
 
@@ -164,7 +175,7 @@ public class ReadCsv {
 		return list;
 	}
 
-	private static void uploadAddress(String string) {
+	public static void uploadAddress(String string) {
 
 		// addressData = uploadDataToCollection(Address.class, string);
 
@@ -193,7 +204,7 @@ public class ReadCsv {
 		}
 	}
 
-	private static void uploadClass(String string) {
+	public static void uploadClass(String string) {
 
 		String line = "";
 
@@ -219,7 +230,7 @@ public class ReadCsv {
 
 	}
 
-	private static void uploadStudent(String string) {
+	public static void uploadStudent(String string) {
 
 		String line = "";
 
@@ -280,8 +291,8 @@ public class ReadCsv {
 	 * e.printStackTrace(); } return null; }
 	 */
 
-	// Fail student whose age > 20
-	private static List<Student> FailStudentByAge(int age) {
+	//8. It should fail if student record is having age > 20.
+	public static List<Student> FailStudentByAge(int age) {
 
 		return studentData.stream().filter(s -> s.getAge() > age).peek(s -> s.setResultStatus("Failed"))
 				.collect(Collectors.toList());
@@ -291,7 +302,7 @@ public class ReadCsv {
 	static int id = 0;
 
 	// Delete student
-	private static String deleteStudentById(int deleteById) {
+	public static String deleteStudentById(int deleteById) {
 
 		if (studentData.stream().filter(s -> s.getStudent_id() == deleteById).count() > 0) {
 
@@ -311,7 +322,7 @@ public class ReadCsv {
 	}
 
 	// If there is no student remaining in that class. Class should also be deleted.
-	private static String deleteClassIfHasNoStudent() {
+	public static String deleteClassIfHasNoStudent() {
 
 		List<Integer> classIds = classData.stream().map(c -> c.getClass_id()).collect(Collectors.toList());
 

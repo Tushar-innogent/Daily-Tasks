@@ -26,7 +26,7 @@ public class FilterData {
 		FilterData.addressData = addressData;
 	}
 
-	// filter the data by pincode
+	// 1.Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
 	public static List filterByPincode(List<Student> studentData, long pincode) {
 
 		List<Student> list = new ArrayList<Student>();
@@ -72,7 +72,7 @@ public class FilterData {
 		return list;
 	}
 
-	// filter students by city
+	//2. Find all students of city ex X = Indore. I can pass different filters like gender, age, class
 	public static List<Student> filterByCity(List<Student> studentData, String city) {
 
 		List<Student> byCity = new ArrayList<Student>();
@@ -93,6 +93,7 @@ public class FilterData {
 		return byCity;
 	}
 
+//	6. Find all student of class X (ex X = A).  I can pass different filters like gender, age, class, city, pincode
 	public static List<Student> filterByClass(String className) {
 
 		Optional<Classes> optional = classData.stream().filter(s -> className.equalsIgnoreCase(s.getClass_name()))

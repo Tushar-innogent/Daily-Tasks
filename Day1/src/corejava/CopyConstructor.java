@@ -3,25 +3,6 @@ package corejava;
 import java.util.ArrayList;
 import java.util.List;
 
-class Items{
-	
-}
-class ShoppingCart{
-	
-	List<Items> items ;
-	
-	public ShoppingCart() {
-		items = new ArrayList<Items>();
-	}
-	
-	public ShoppingCart(ShoppingCart cart) { // copy constructor
-		items = new ArrayList<Items>(cart.items);
-	}
-	
-    //Methods to add/remove items to the cart
-	
-	
-}
 
 class Customer{
 	
@@ -38,6 +19,60 @@ class Customer{
 		return new ShoppingCart(this.cart);
 	}
 }
+
+class Items{
+	private String name;
+	private Integer numberOfitem;
+	private Double price;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Integer getNumberOfitem() {
+		return numberOfitem;
+	}
+	public void setNumberOfitem(Integer numberOfitem) {
+		this.numberOfitem = numberOfitem;
+	}
+	public Double getPrice() {
+		return price;
+	}
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	@Override
+	public String toString() {
+		return "Items [name=" + name + ", numberOfitem=" + numberOfitem + ", price=" + price + "]";
+	}
+}
+
+class ShoppingCart{
+	
+	List<Items> items ;
+	
+	public ShoppingCart() {
+		items = new ArrayList<Items>();
+	}
+	
+	public ShoppingCart(ShoppingCart cart) { // copy constructor
+		items = new ArrayList<Items>(cart.items);
+	}
+	
+    //Methods to add/remove items to the cart
+	public String addToCart(Items item) {
+		items.add(item);
+		return item+" added to cart!";
+	}
+	
+	public String deleteFromCart(Items item) {
+		items.remove(item);
+		return item+" removed from cart!";
+	}
+	
+}
+
 
 public class CopyConstructor {
 	
