@@ -3,7 +3,6 @@ package part1;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,7 +54,7 @@ public class ReadCsv {
 				String[] tempData = line.split(",");
 
 				address.setAddress_id(Integer.parseInt(tempData[0]));
-				address.setPin_Code(Long.parseLong(tempData[1]));
+//				address.setPin_Code(Long.tempData[1]);
 				address.setCity(tempData[2]);
 				address.setStudent_id(Integer.parseInt(tempData[3]));
 
