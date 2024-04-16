@@ -9,6 +9,24 @@ class Customer{
 	private String name;
 	private ShoppingCart cart;
 	
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ShoppingCart getCart() {
+		return cart;
+	}
+
+	public void setCart(ShoppingCart cart) {
+		this.cart = cart;
+	}
+
 	public Customer(String name, ShoppingCart cart) {
 		super();
 		this.name = name;
@@ -16,7 +34,7 @@ class Customer{
 	}
 	
 	public ShoppingCart getCartCopy() {
-		return new ShoppingCart(this.cart);
+		return new ShoppingCart(this.cart); //Deep copy
 	}
 }
 
@@ -24,6 +42,14 @@ class Items{
 	private String name;
 	private Integer numberOfitem;
 	private Double price;
+	
+	
+	public Items(String name, Integer numberOfitem, Double price) {
+		super();
+		this.name = name;
+		this.numberOfitem = numberOfitem;
+		this.price = price;
+	}
 	public String getName() {
 		return name;
 	}
@@ -60,7 +86,7 @@ class ShoppingCart{
 		items = new ArrayList<Items>(cart.items);
 	}
 	
-    //Methods to add/remove items to the cart
+    //Methods to add/remove/print items to the cart
 	public String addToCart(Items item) {
 		items.add(item);
 		return item+" added to cart!";
@@ -71,6 +97,9 @@ class ShoppingCart{
 		return item+" removed from cart!";
 	}
 	
+	public void printItems() {
+		items.forEach(System.out::println);
+	}
 }
 
 
@@ -89,12 +118,28 @@ public class CopyConstructor {
 	
 	public static void main(String[] args) {
 		
-		Customer cust1 = new Customer("Harsh", new ShoppingCart());
+		ShoppingCart sCart = new ShoppingCart();
+		
+		Customer cust1 = new Customer("Harsh", sCart);
 		
 		//customer can add items to the cart through various methods
 		
 		//Final order processing
 		processOrder(cust1);
+		
+		System.out.println("sCart : "+sCart);
+		System.out.println("cust1.shoppingcart : "+cust1.getCartCopy());
+		
+		
+		ShoppingCart sCart2 = new ShoppingCart();
+		Customer customer1 = new Customer("Mohit", sCart2);
+		sCart2.addToCart(new Items("Shirt", 2, 1000.0));
+		
+		Customer customer1Friend = new Customer("Mahesh", sCart2);
+		sCart2.addToCart(new Items("Mobile", 1, 10000.0));
+		
+		System.out.println();
+		customer1.getCart().printItems();
 	}
 	
 	
