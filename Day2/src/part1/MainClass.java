@@ -45,18 +45,18 @@ public class MainClass {
 
 // 1. 	Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
 
-		List<Student> filteredbyPincode = filterData.filterByPincode(studentData, 482002);
+		List<Student> filteredbyPincode = FilterData.filterByPincode(studentData, 482002);
 //		filteredbyPincode.forEach(System.out::println);
 
 		
 // 2. 	Find all students of city ex X = Indore. I can pass different filters like gender, age, class
 
 		String city = "Indore";
-		List<Student> filteredbyCity = filterData.filterByCity(studentData, city);
+		List<Student> filteredbyCity = FilterData.filterByCity(studentData, city);
 //		filteredbyCity.forEach(System.out::println);
 
 		//filter the filteredbyCity data by gender now
-		List<Student> filteredByCityAndGender = filterData.filterByGender(filteredbyCity, 'F');
+		List<Student> filteredByCityAndGender = FilterData.filterByGender(filteredbyCity, 'F');
 		filteredByCityAndGender.forEach(System.out::println);
 
 		
@@ -66,16 +66,22 @@ public class MainClass {
 
 		
 //	4.	Get the passed students. I can pass different filters like gender, age, class, city, pincode
-//		getPassedOnes();
-
+		List<Student> passedStudents = getPassedOnes();
+//		System.out.println("Passed Students : ");
+//		passedStudents.stream().forEach(System.out::println);
+		
+		//now i can filter passedStudent further using different methods filterByGender, filterByAge etc..
+		List<Student> passedStudentFilteredByAge = FilterData.filterByAge(studentData, 20);
+		passedStudentFilteredByAge.forEach(System.out::println);
 		
 //	5. 	Get the failed students. I can pass different filters like gender, age, class, city, pincode
-//		getFailedOnes();
-		
+		List<Student> failedStudents = getFailedOnes();
+//		System.out.println("Failed Students : ");
+//		failedStudents.stream().forEach(System.out::println);
 		
 //	6. 	Find all student of class X (ex X = A).  I can pass different filters like gender, age, class, city, pincode
 
-		List<Student> filteredByClass = filterData.filterByClass("A");
+		List<Student> filteredByClass = FilterData.filterByClass("A");
 //		filteredByClass.forEach(System.out::println);
 
 		
@@ -115,36 +121,36 @@ public class MainClass {
 //		like : read female students firread paginated studentsst 1-5 order by marks
 //		like : read female students first 9-50 order by marks
 
-		List<Student> filteredByGender = filterData.filterByGender(studentData, 'F');
+		List<Student> filteredByGender = FilterData.filterByGender(studentData, 'F');
 
-		List<Student> paginatedData = filterData.readPaginated(filteredByGender, 1, 9);
+		List<Student> paginatedData = FilterData.readPaginated(filteredByGender, 1, 9);
 
 // provide the sorting criteria name or marks 
 
-		List<Student> sortPaginatedData = filterData.sortData(paginatedData, "marks");
+		List<Student> sortPaginatedData = FilterData.sortData(paginatedData, "marks");
 
 //		sortPaginatedData.forEach(System.out::println);
 	
 	}//main ends here
 
 
+	
 //	5. Get the failed students. I can pass different filters like gender, age, class, city, pincode
-	public static void getFailedOnes() {
+	public static List<Student> getFailedOnes() {
 
 		List<Student> failedStudents = studentData.stream().filter(s -> s.getMarks() < 50)
 				.collect(Collectors.toList());
-		System.out.println("Failed Students : ");
-		failedStudents.stream().forEach(System.out::println);
+		
+		return failedStudents;
 
 	}
 
 //	4. Get the passed students. I can pass different filters like gender, age, class, city, pincode
-	public static void getPassedOnes() {
+	public static List<Student> getPassedOnes() {
 		List<Student> passedStudents = studentData.stream().filter(s -> s.getMarks() >= 50)
 				.collect(Collectors.toList());
 
-		System.out.println("Passed Students : ");
-		passedStudents.stream().forEach(System.out::println);
+		return passedStudents;
 	}
 
 //	3. Give Ranking to students

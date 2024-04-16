@@ -27,7 +27,7 @@ public class FilterData {
 	}
 
 	// 1.Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
-	public static List filterByPincode(List<Student> studentData, long pincode) {
+	public static List<Student> filterByPincode(List<Student> studentData, long pincode) {
 
 		List<Student> list = new ArrayList<Student>();
 		List<Integer> sIdOfSelectedOnes = new ArrayList<Integer>();
@@ -47,7 +47,7 @@ public class FilterData {
 	}
 
 	// filter the data by gender
-	public static List filterByGender(List<Student> studentData, char gender) {
+	public static List<Student> filterByGender(List<Student> studentData, char gender) {
 
 		List<Student> list = new ArrayList<Student>();
 
@@ -60,7 +60,7 @@ public class FilterData {
 	}
 
 	// filter the data by age
-	public static List filterByAge(List<Student> studentData, int age) {
+	public static List<Student> filterByAge(List<Student> studentData, int age) {
 
 		List<Student> list = new ArrayList<Student>();
 
