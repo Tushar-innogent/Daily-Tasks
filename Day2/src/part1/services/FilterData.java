@@ -43,7 +43,6 @@ public class FilterData {
 	public static List<Student> filterByGender(List<Student> studentData, char gender) {
 
 		List<Student> list = new ArrayList<Student>();
-
 		studentData.forEach(s -> {
 //			if (s.getGender() == Character.toUpperCase(gender)) {
 //				list.add(s);
