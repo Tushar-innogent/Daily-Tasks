@@ -1,4 +1,4 @@
-package part1;
+package part1.services;
 
 import java.util.List;
 

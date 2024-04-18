@@ -2,31 +2,47 @@ package entities;
 
 public class Student {
 
-	private int student_id;
-	private String student_name;
-	private int class_id;
+	private int studentId;
+	private String studentName;
+	private int classId;
 	private int marks;
-	private char gender;
+	private Gender gender;
 	private int age;
 	private String resultStatus;
 	
-	public int getStudent_id() {
-		return student_id;
+	public Student(int studentId, String studentName, int classId, int marks, Gender gender, int age,
+			String resultStatus) {
+		super();
+		this.studentId = studentId;
+		this.studentName = studentName;
+		this.classId = classId;
+		this.marks = marks;
+		this.gender = gender;
+		this.age = age;
+		this.resultStatus = resultStatus;
 	}
-	public void setStudent_id(int student_id) {
-		this.student_id = student_id;
+	
+	public Student() {
+		// TODO Auto-generated constructor stub
 	}
-	public String getStudent_name() {
-		return student_name;
+	
+	public int getStudentId() {
+		return studentId;
 	}
-	public void setStudent_name(String student_name) {
-		this.student_name = student_name;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
-	public int getClass_id() {
-		return class_id;
+	public String getStudentName() {
+		return studentName;
 	}
-	public void setClass_id(int class_id) {
-		this.class_id = class_id;
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
+	}
+	public int getClassId() {
+		return classId;
+	}
+	public void setClassId(int classId) {
+		this.classId = classId;
 	}
 	public int getMarks() {
 		return marks;
@@ -34,10 +50,10 @@ public class Student {
 	public void setMarks(int marks) {
 		this.marks = marks;
 	}
-	public char getGender() {
+	public Gender getGender() {
 		return gender;
 	}
-	public void setGender(char gender) {
+	public void setGender(Gender gender) {
 		this.gender = gender;
 	}
 	public int getAge() {
@@ -45,17 +61,17 @@ public class Student {
 	}
 	public void setAge(int age) {
 		this.age = age;
-	}	
+	}
 	public String getResultStatus() {
 		return resultStatus;
 	}
 	public void setResultStatus(String resultStatus) {
 		this.resultStatus = resultStatus;
 	}
+
 	@Override
 	public String toString() {
-		return "Student [student_id=" + student_id + ", student_name=" + student_name + ", class_id=" + class_id
+		return "Student [studentId=" + studentId + ", studentName=" + studentName + ", classId=" + classId
 				+ ", marks=" + marks + ", gender=" + gender + ", age=" + age + ", resultStatus=" + resultStatus + "]";
 	}	
-	
 }

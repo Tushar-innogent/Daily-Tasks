@@ -2,22 +2,22 @@ package entities;
 
 public class Address {
 
-	private int address_id;
-	private long pin_Code;
+	private int addressId;
+	private long pinCode;
 	private String city;
-	private int student_id;
-	
-	public int getAddress_id() {
-		return address_id;
+	private int studentId;
+		
+	public int getAddressId() {
+		return addressId;
 	}
-	public void setAddress_id(int address_id) {
-		this.address_id = address_id;
+	public void setAddressId(int addressId) {
+		this.addressId = addressId;
 	}
-	public long getPin_Code() {
-		return pin_Code;
+	public long getPinCode() {
+		return pinCode;
 	}
-	public void setPin_Code(long pin_Code) {
-		this.pin_Code = pin_Code;
+	public void setPinCode(long pinCode) {
+		this.pinCode = pinCode;
 	}
 	public String getCity() {
 		return city;
@@ -25,18 +25,16 @@ public class Address {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public int getStudent_id() {
-		return student_id;
+	public int getStudentId() {
+		return studentId;
 	}
-	public void setStudent_id(int student_id) {
-		this.student_id = student_id;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Address [address_id=" + address_id + ", pin_Code=" + pin_Code + ", city=" + city + ", student_id="
-				+ student_id + "]";
-	}
-	
-	
+		return "Address [addressId=" + addressId + ", pinCode=" + pinCode + ", city=" + city + ", studentId="
+				+ studentId + "]";
+	}	
 }

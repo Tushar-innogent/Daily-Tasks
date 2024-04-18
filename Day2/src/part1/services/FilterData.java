@@ -1,4 +1,4 @@
-package part1;
+package part1.services;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import dto.FilterByPincodeDTO;
 import entities.Address;
 import entities.Classes;
 import entities.Student;
@@ -26,24 +27,16 @@ public class FilterData {
 		FilterData.addressData = addressData;
 	}
 
-	// 1.Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
-	public static List<Student> filterByPincode(List<Student> studentData, long pincode) {
-
-		List<Student> list = new ArrayList<Student>();
-		List<Integer> sIdOfSelectedOnes = new ArrayList<Integer>();
-
-		addressData.forEach(a -> {
-			if (a.getPin_Code() == pincode) {
-				sIdOfSelectedOnes.add(a.getStudent_id());
-			}
-		});
-
-		studentData.forEach(s -> {
-			if (sIdOfSelectedOnes.contains(s.getStudent_id())) {
-				list.add(s);
-			}
-		});
-		return list;
+	// 1.Find all students of pincode X(ex X = 482002). I can pass different filters
+	// like gender, age, class
+	public static List<Student> filterByPincode(List<Student> studentData, FilterByPincodeDTO dto) {
+		return studentData.parallelStream().filter(s -> addressData.stream()
+				.filter(a -> (Validators.validatePincode(dto.getPincode()) ? a.getPinCode() == dto.getPincode() :false ))
+				.map(Address::getStudentId).toList().contains(s.getStudentId()))
+				.filter(s->(Validators.validateGender(dto.getGender()) ? dto.getGender().equals(s.getGender()):false)
+				&& (Validators.validateAge(dto.getAge()) ? dto.getAge().equals(s.getAge()) : false)
+				&& (Validators.validateCity(classData, dto.getClassName()) == s.getClassId()))
+				.toList();
 	}
 
 	// filter the data by gender
@@ -52,9 +45,9 @@ public class FilterData {
 		List<Student> list = new ArrayList<Student>();
 
 		studentData.forEach(s -> {
-			if (s.getGender() == Character.toUpperCase(gender)) {
-				list.add(s);
-			}
+//			if (s.getGender() == Character.toUpperCase(gender)) {
+//				list.add(s);
+//			}
 		});
 		return list;
 	}
@@ -72,7 +65,8 @@ public class FilterData {
 		return list;
 	}
 
-	//2. Find all students of city ex X = Indore. I can pass different filters like gender, age, class
+	// 2. Find all students of city ex X = Indore. I can pass different filters like
+	// gender, age, class
 	public static List<Student> filterByCity(List<Student> studentData, String city) {
 
 		List<Student> byCity = new ArrayList<Student>();
@@ -81,12 +75,12 @@ public class FilterData {
 
 		addressData.forEach(a -> {
 			if (a.getCity().equalsIgnoreCase(city)) {
-				idsOfstudent.add(a.getStudent_id());
+				idsOfstudent.add(a.getStudentId());
 			}
 		});
 
 		studentData.forEach(s -> {
-			if (idsOfstudent.contains(s.getStudent_id())) {
+			if (idsOfstudent.contains(s.getStudentId())) {
 				byCity.add(s);
 			}
 		});
@@ -101,7 +95,7 @@ public class FilterData {
 
 		Classes classes = optional.get();
 
-		List<Student> filteredByClass = studentData.stream().filter(s -> s.getClass_id() == classes.getClass_id())
+		List<Student> filteredByClass = studentData.stream().filter(s -> s.getClassId() == classes.getClass_id())
 				.collect(Collectors.toList());
 
 		return filteredByClass;
@@ -111,25 +105,25 @@ public class FilterData {
 	public static List<Student> readPaginated(List<Student> studentData, int start, int end) {
 
 		List<Student> students = studentData.stream()
-				.filter(s -> (s.getStudent_id() >= start && s.getStudent_id() <= end)).collect(Collectors.toList());
+				.filter(s -> (s.getStudentId() >= start && s.getStudentId() <= end)).collect(Collectors.toList());
 
 		return students;
 	}
 
 	public static List<Student> sortData(List<Student> data, String sortBy) {
-		
+
 		return data.stream().sorted(getComparator(sortBy)).collect(Collectors.toList());
 
 	}
 
 	private static Comparator<Student> getComparator(String sortBy) {
-        switch (sortBy.toLowerCase()) {
-            case "name":
-                return Comparator.comparing(Student::getStudent_name);
-            case "marks":
-                return Comparator.comparingInt(Student::getMarks).reversed();
-            default:
-                return Comparator.comparingInt(Student::getStudent_id);
-        }
+		switch (sortBy.toLowerCase()) {
+		case "name":
+			return Comparator.comparing(Student::getStudentName);
+		case "marks":
+			return Comparator.comparingInt(Student::getMarks).reversed();
+		default:
+			return Comparator.comparingInt(Student::getStudentId);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package part1;
+package part1.dataHandler;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,80 +11,78 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import dto.FilterByPincodeDTO;
 import entities.Address;
 import entities.Classes;
+import entities.Gender;
 import entities.Student;
+import part1.services.FilterData;
+import part1.services.Rank;
 
 public class MainClass {
 
 	// Collecting and storing data of the files
-	static List<Classes> classData = new ArrayList<Classes>();
-	static List<Student> studentData = new ArrayList<Student>();
-	static List<Address> addressData = new ArrayList<Address>();
-	
-	static FilterData filterData;
+	static List<Classes> classData = new ArrayList<Classes>(50);
+	static List<Student> studentData = new ArrayList<Student>(50);
+	static List<Address> addressData = new ArrayList<Address>(50);
+
+	// Files path
+	static String studentCsv = "C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Student.csv";
+	static String classCsv = "C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Class.csv";
+	static String addressCsv = "C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Address.csv";
 
 	public static void main(String[] args) {
-
-		uploadStudent(
-				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Student.csv");
-		uploadClass(
-				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Class.csv");
-		uploadAddress(
-				"C:\\\\Users\\\\Tushar Patidar\\\\OneDrive\\\\Desktop\\\\Innogent\\\\Day2 - part1\\\\Address.csv");
-
-//		instantiating FilterData class by passing data
-		filterData = new FilterData(studentData, classData, addressData);
+//		long startTime = System.currentTimeMillis();
+		uploadStudent(studentCsv);
+		uploadClass(classCsv);
+		uploadAddress(addressCsv);
+//		long endTime = System.currentTimeMillis();
+//		System.out.println("file reading time : " + (endTime-startTime));
 		
-// 		I should be able to read paginated students.
-// 		like : read female students first 1-9
-		List<Student> result = fun1("F", 1, 9);
+		FilterData filterData = new FilterData(studentData, classData, addressData);
+
+// 		I should be able to read paginated students. like : read female students first 1-9
+		List<Student> result = fun1('M', 1, 9);
 //		result.forEach(System.out::println);
 
-		
-
 // 1. 	Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
+		List<Student> filteredbyPincode = FilterData.filterByPincode(studentData, new FilterByPincodeDTO(482002L, Gender.F, 22, "c"));
+		filteredbyPincode.forEach(System.out::println);
 
-		List<Student> filteredbyPincode = FilterData.filterByPincode(studentData, 482002);
-//		filteredbyPincode.forEach(System.out::println);
-
-		
 // 2. 	Find all students of city ex X = Indore. I can pass different filters like gender, age, class
 
 		String city = "Indore";
 		List<Student> filteredbyCity = FilterData.filterByCity(studentData, city);
 //		filteredbyCity.forEach(System.out::println);
 
-		//filter the filteredbyCity data by gender now
+		// filter the filteredbyCity data by gender now
 		List<Student> filteredByCityAndGender = FilterData.filterByGender(filteredbyCity, 'F');
-		filteredByCityAndGender.forEach(System.out::println);
+//		filteredByCityAndGender.forEach(System.out::println);
 
-		
 // 3. 	Give Ranking to students
 		giveRank();
 //		studentData.forEach(System.out::println);
 
-		
 //	4.	Get the passed students. I can pass different filters like gender, age, class, city, pincode
 		List<Student> passedStudents = getPassedOnes();
 //		System.out.println("Passed Students : ");
 //		passedStudents.stream().forEach(System.out::println);
-		
-		//now i can filter passedStudent further using different methods filterByGender, filterByAge etc..
+
+		// now i can filter passedStudent further using different methods
+		// filterByGender, filterByAge etc..
 		List<Student> passedStudentFilteredByAge = FilterData.filterByAge(studentData, 20);
 		passedStudentFilteredByAge.forEach(System.out::println);
-		
+
 //	5. 	Get the failed students. I can pass different filters like gender, age, class, city, pincode
 		List<Student> failedStudents = getFailedOnes();
 //		System.out.println("Failed Students : ");
 //		failedStudents.stream().forEach(System.out::println);
-		
+
 //	6. 	Find all student of class X (ex X = A).  I can pass different filters like gender, age, class, city, pincode
 
 		List<Student> filteredByClass = FilterData.filterByClass("A");
 //		filteredByClass.forEach(System.out::println);
 
-		
 //	8. It should fail if student record is having age > 20.
 
 		int age = 20;
@@ -92,7 +90,6 @@ public class MainClass {
 
 //		studentData.forEach(System.out::println);
 
-		
 //	9. I should be able to delete student. After that it should delete the respective obj from Address & Student.
 
 		// provide the id of the student to delete
@@ -106,7 +103,6 @@ public class MainClass {
 //		studentData.forEach(System.out::println);
 //		addressData.forEach(System.out::println);
 
-		
 //	10. If there is no student remaining in that class. Class should also be deleted.
 
 		String message = deleteClassIfHasNoStudent();
@@ -114,7 +110,6 @@ public class MainClass {
 
 //		classData.forEach(System.out::println);
 
-		
 //	11. I should be able to .
 //		like : read female students first 1-9
 //		like : read female students first 7-8 order by name
@@ -125,22 +120,19 @@ public class MainClass {
 
 		List<Student> paginatedData = FilterData.readPaginated(filteredByGender, 1, 9);
 
-// provide the sorting criteria name or marks 
+// 		provide the sorting criteria name or marks 
 
 		List<Student> sortPaginatedData = FilterData.sortData(paginatedData, "marks");
 
 //		sortPaginatedData.forEach(System.out::println);
-	
-	}//main ends here
 
+	}// main ends here
 
-	
 //	5. Get the failed students. I can pass different filters like gender, age, class, city, pincode
 	public static List<Student> getFailedOnes() {
 
-		List<Student> failedStudents = studentData.stream().filter(s -> s.getMarks() < 50)
-				.collect(Collectors.toList());
-		
+		List<Student> failedStudents = studentData.stream().filter(s -> s.getMarks() < 50).collect(Collectors.toList());
+
 		return failedStudents;
 
 	}
@@ -167,18 +159,10 @@ public class MainClass {
 		}
 	}
 
-	// I should be able to read paginated students.
-	// like : read female students first 1-9
-	public static List<Student> fun1(String string, int start, int end) {
-
-		ArrayList<Student> list = new ArrayList<Student>();
-
-		studentData.forEach(s -> {
-			if (s.getGender() == 'F' && s.getStudent_id() >= 1 && s.getStudent_id() <= 9) {
-				list.add(s);
-			}
-		});
-		return list;
+	// I should be able to read paginated students. like : read female students first 1-9
+	public static List<Student> fun1(Character gender, int start, int end) {
+		return studentData.stream().filter(s -> s.getGender().toString().equalsIgnoreCase(String.valueOf(gender)))
+				.skip(start).limit(end - start).toList();
 	}
 
 	public static void uploadAddress(String string) {
@@ -198,11 +182,10 @@ public class MainClass {
 
 				String[] tempData = line.split(",");
 
-				address.setAddress_id(Integer.parseInt(tempData[0]));
-				address.setPin_Code(Long.parseLong(tempData[1]));
+				address.setAddressId(Integer.parseInt(tempData[0]));
+				address.setPinCode(Long.parseLong(tempData[1]));
 				address.setCity(tempData[2]);
-				address.setStudent_id(Integer.parseInt(tempData[3]));
-
+				address.setStudentId(Integer.parseInt(tempData[3]));
 				addressData.add(address);
 			}
 		} catch (Exception e) {
@@ -251,11 +234,11 @@ public class MainClass {
 
 				String[] tempData = line.split(",");
 
-				student.setStudent_id(Integer.parseInt(tempData[0]));
-				student.setStudent_name(tempData[1]);
-				student.setClass_id(Integer.parseInt(tempData[2]));
+				student.setStudentId(Integer.parseInt(tempData[0]));
+				student.setStudentName(tempData[1]);
+				student.setClassId(Integer.parseInt(tempData[2]));
 				student.setMarks(Integer.parseInt(tempData[3]));
-				student.setGender(Character.toUpperCase(tempData[4].toCharArray()[0]));
+				student.setGender((tempData[4].equalsIgnoreCase("m"))?Gender.M:Gender.F);
 				student.setAge(Integer.parseInt(tempData[5]));
 
 				studentData.add(student);
@@ -297,7 +280,7 @@ public class MainClass {
 	 * e.printStackTrace(); } return null; }
 	 */
 
-	//8. It should fail if student record is having age > 20.
+	// 8. It should fail if student record is having age > 20.
 	public static List<Student> FailStudentByAge(int age) {
 
 		return studentData.stream().filter(s -> s.getAge() > age).peek(s -> s.setResultStatus("Failed"))
@@ -310,20 +293,14 @@ public class MainClass {
 	// Delete student
 	public static String deleteStudentById(int deleteById) {
 
-		if (studentData.stream().filter(s -> s.getStudent_id() == deleteById).count() > 0) {
+		if (studentData.stream().filter(s -> s.getStudentId() == deleteById).count() > 0) {
 
-			Optional<Student> optional = studentData.stream().filter(a -> a.getStudent_id() == deleteById).findFirst();
-
+			Optional<Student> optional = studentData.stream().filter(a -> a.getStudentId() == deleteById).findFirst();
 			Student student = optional.get();
-
 			studentData.remove(student);
-
-			addressData = addressData.stream().filter(a -> a.getStudent_id() != deleteById)
-					.collect(Collectors.toList());
-
+			addressData = addressData.stream().filter(a -> a.getStudentId() != deleteById).collect(Collectors.toList());
 			return "Data Deleted";
 		}
-
 		return "Student doesn't exists with given id.";
 	}
 
@@ -339,7 +316,7 @@ public class MainClass {
 		});
 
 		studentData.stream().forEach(c -> {
-			map.put(c.getClass_id(), map.getOrDefault(c.getClass_id(), 0) + 1);
+			map.put(c.getClassId(), map.getOrDefault(c.getClassId(), 0) + 1);
 		});
 
 		for (Entry<Integer, Integer> e : map.entrySet()) {
