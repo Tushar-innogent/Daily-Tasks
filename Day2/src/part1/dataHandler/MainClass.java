@@ -46,7 +46,7 @@ public class MainClass {
 //		result.forEach(System.out::println);
 
 // 1. 	Find all students of pincode X(ex X = 482002). I can pass different filters like gender, age, class
-		List<Student> filteredbyPincode = FilterData.filterByPincode(studentData, new FilterByPincodeDTO(482002L, Gender.F, 22, "c"));
+		List<Student> filteredbyPincode = FilterData.filterByPincode(studentData, new FilterByPincodeDTO(482002L, Gender.F, null, "c"));
 		filteredbyPincode.forEach(System.out::println);
 
 // 2. 	Find all students of city ex X = Indore. I can pass different filters like gender, age, class
